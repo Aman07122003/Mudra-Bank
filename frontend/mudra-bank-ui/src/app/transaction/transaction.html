@@ -1,0 +1,42 @@
+<div class="modal-backdrop">
+
+    <div class="modal">
+
+        <h2>{{ type }} Transaction</h2>
+
+        <p>
+            Account: {{ account.accountNumber }}
+        </p>
+
+        <p>
+            Holder: {{ account.holderName }}
+        </p>
+
+        <p>
+            Balance: ₹ {{ account.balance }}
+        </p>
+
+        <input
+            type="number"
+            [(ngModel)]="amount"
+            placeholder="Enter amount">
+
+        <div class="actions">
+
+            <button
+                class="cancel-btn"
+                (click)="cancel()">
+                Cancel
+            </button>
+
+            <button
+                class="submit-btn"
+                (click)="submit()">
+                Submit
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,75 @@
+<div class="container">
+
+  <div class="page-header">
+    <div class="brand">
+      <img src="images/logo.png" alt="Mudra Bank Logo" class="logo">
+      <div>
+        <h1>Mudra Bank</h1>
+        <p>Account Management</p>
+      </div>
+    </div>
+    <div>
+        <button class="add-account-btn" (click)="addAccount()">
+            Add Account
+        </button>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Account Number</th>
+        <th>Holder Name</th>
+        <th>Balance</th>
+        <th class="action-buttons">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for(account of accounts; track account.accountNumber) {
+      <tr
+            class="account-row"
+            (click)="openAccount(account)">
+        <td>{{ account.accountNumber }}</td>
+
+        <td class="account-name">
+          {{ account.holderName }}
+        </td>
+
+        <td>
+          ₹ {{ account.balance }}
+        </td>
+
+        <td class="action-buttons">
+          <button
+            class="debit-btn"
+            (click)="$event.stopPropagation(); debit(account)">
+            Debit
+          </button>
+
+          <button
+            class="credit-btn"
+            (click)="$event.stopPropagation(); credit(account)">
+            Credit
+          </button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+</div>
+
+@if(showTransactionModal){
+    <app-transaction
+        [account]="selectedAccount"
+        [type]="transactionType"
+        (close)="closeTransactionModal()">
+    </app-transaction>
+}
+
+@if(showAddAccountModal){
+    <app-add-account
+        (close)="closeAddAccountModal()">
+    </app-add-account>
+}

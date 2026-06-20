@@ -1,0 +1,125 @@
+<div class="details-container">
+
+    <div class="page-header">
+        <div>
+            <h1>Account Details</h1>
+            <p>Account #{{ account.accountNumber }}</p>
+        </div>
+
+        <button class="back-btn" routerLink="/">
+            ← Back to Accounts
+        </button>
+    </div>
+
+    <!-- Account Summary -->
+
+    <div class="summary-card">
+
+        <div class="profile-section">
+
+            <div class="avatar">
+                {{ account.holderName[0] }}
+            </div>
+
+            <div>
+                <h2>{{ account.holderName }}</h2>
+                <p>{{ account.email }}</p>
+            </div>
+
+        </div>
+
+        <div class="balance-section">
+
+            <span>Available Balance</span>
+
+            <h1>
+                ₹ {{ account.balance | number }}
+            </h1>
+
+        </div>
+
+    </div>
+
+    <!-- Stats -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <span>Account Number</span>
+            <h3>{{ account.accountNumber }}</h3>
+        </div>
+
+        <div class="stat-card">
+            <span>Mobile</span>
+            <h3>{{ account.mobile }}</h3>
+        </div>
+
+        <div class="stat-card">
+            <span>Branch</span>
+            <h3>{{ account.branch }}</h3>
+        </div>
+
+        <div class="stat-card">
+            <span>Status</span>
+            <h3 class="active">ACTIVE</h3>
+        </div>
+
+    </div>
+
+    <!-- Transactions -->
+
+    <div class="card">
+
+        <div class="transaction-header">
+            <h2>Transaction History</h2>
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>From / To</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @for(transaction of transactions; track $index) {
+
+                <tr>
+
+                    <td>{{ transaction.date }}</td>
+
+                    <td>
+
+                        <span
+                            class="badge"
+                            [class.credit]="transaction.type === 'Credit'"
+                            [class.debit]="transaction.type === 'Debit'">
+
+                            {{ transaction.type }}
+
+                        </span>
+
+                    </td>
+
+                    <td>{{ transaction.fromTo }}</td>
+
+                    <td>
+                        ₹ {{ transaction.amount | number }}
+                    </td>
+
+                </tr>
+
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

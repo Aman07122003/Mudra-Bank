@@ -1,0 +1,38 @@
+<div class="modal-backdrop">
+
+    <div class="modal">
+
+        <h2>Add New Account</h2>
+
+        <input
+            type="number"
+            placeholder="Account Number"
+            [(ngModel)]="accountNumber">
+
+        <input
+            type="text"
+            placeholder="Account Holder Name"
+            [(ngModel)]="holderName">
+
+        <input
+            type="number"
+            placeholder="Opening Balance"
+            [(ngModel)]="balance">
+
+        <div class="actions">
+            <button
+                class="cancel-btn"
+                (click)="cancel()">
+                Cancel
+            </button>
+
+            <button
+                class="submit-btn"
+                (click)="save()">
+                Save Account
+            </button>
+        </div>
+
+    </div>
+
+</div>
