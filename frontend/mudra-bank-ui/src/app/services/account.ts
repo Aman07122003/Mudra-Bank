@@ -29,4 +29,26 @@ getAccount(accountNumber: number) {
   createAccount(payload: any): Observable<any> {
     return this.http.put<any>(this.baseUrl, payload);
   }
+
+  downloadAccountsCsv(page: number, size: number) {
+
+  return this.http.get(
+    `${this.baseUrl}/export/csv?page=${page}&size=${size}`,
+    {
+      responseType: 'blob'
+    }
+  );
+
+}
+
+downloadAccountsPdf(page: number, size: number) {
+
+  return this.http.get(
+    `${this.baseUrl}/export/pdf?page=${page}&size=${size}`,
+    {
+      responseType: 'blob'
+    }
+  );
+
+}
 }

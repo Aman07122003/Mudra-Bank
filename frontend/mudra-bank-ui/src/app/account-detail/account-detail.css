@@ -83,6 +83,38 @@
     gap: 20px;
 }
 
+.download-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.csv-btn,
+.pdf-btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    color: white;
+    transition: background-color .2s ease;
+}
+
+.csv-btn {
+    background: #2e7d32;
+}
+
+.csv-btn:hover {
+    background: #1b5e20;
+}
+
+.pdf-btn {
+    background: #c62828;
+}
+
+.pdf-btn:hover {
+    background: #8e0000;
+}
+
 .avatar {
     width: 60px;
     height: 60px;
@@ -353,4 +385,37 @@ tbody tr:hover {
     .pagination select {
         flex: 1;
     }
+
+    .download-buttons{
+    display:flex;
+    gap:10px;
+}
+
+.csv-btn,
+.pdf-btn{
+
+    padding:8px 16px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.csv-btn{
+    background:#2e7d32;
+    color:white;
+}
+
+.pdf-btn{
+    background:#c62828;
+    color:white;
+}
+
+.csv-btn:hover{
+    background:#1b5e20;
+}
+
+.pdf-btn:hover{
+    background:#8e0000;
+}
 }

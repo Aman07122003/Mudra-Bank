@@ -138,4 +138,48 @@ changePageSize() {
   trackByAccountNumber(index: number, account: BankAccount): number {
   return account.accountNumber;
 }
+
+downloadCsv(): void {
+
+  this.accountService
+      .downloadAccountsCsv(
+          this.currentPage,
+          this.pageSize)
+      .subscribe(blob => {
+
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = 'accounts.csv';
+
+        link.click();
+
+        window.URL.revokeObjectURL(url);
+      });
+
+}
+
+downloadPdf(): void {
+
+  this.accountService
+      .downloadAccountsPdf(
+          this.currentPage,
+          this.pageSize)
+      .subscribe(blob => {
+
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = 'accounts.pdf';
+
+        link.click();
+
+        window.URL.revokeObjectURL(url);
+      });
+
+}
 }

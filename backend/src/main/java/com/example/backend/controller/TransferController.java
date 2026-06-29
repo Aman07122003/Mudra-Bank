@@ -64,28 +64,19 @@ public class TransferController {
      *
      * @param accountNumber unique account number whose transfer history
      *                      is to be exported
-     * @param page zero-based page number
-     * @param size number of transfer records per page
      * @return CSV file containing the requested transfer history
      */
     @GetMapping(
             value = "/account/{accountNumber}/export/csv",
             produces = "text/csv")
     public ResponseEntity<String> exportTransfersToCsv(
-
-            @PathVariable final Long accountNumber,
-
-            @RequestParam(defaultValue = "0")
-            final int page,
-
-            @RequestParam(defaultValue = "10")
-            final int size) {
+            @PathVariable final Long accountNumber) {
 
         GetAccountTransfersRequest request =
                 new GetAccountTransfersRequest(
                         accountNumber,
-                        page,
-                        size);
+                        0,
+                        Integer.MAX_VALUE);
 
         GetAccountTransfersResponse response =
                 service.getAccountTransfers(request);
@@ -101,17 +92,17 @@ public class TransferController {
                 .body(csv);
     }
 
-    @GetMapping("/account/{accountNumber}/export/pdf")
-    public ResponseEntity<byte[]> exportTransfersPdf(
-            @PathVariable final Long accountNumber,
-            @RequestParam(defaultValue = "0") final int page,
-            @RequestParam(defaultValue = "10") final int size) {
+    @GetMapping(
+            value = "/account/{accountNumber}/export/pdf",
+            produces = "application/pdf")
+    public ResponseEntity<byte[]> exportTransfersToPdf(
+            @PathVariable final Long accountNumber) {
 
         GetAccountTransfersRequest request =
                 new GetAccountTransfersRequest(
                         accountNumber,
-                        page,
-                        size);
+                        0,
+                        Integer.MAX_VALUE);
 
         GetAccountTransfersResponse response =
                 service.getAccountTransfers(request);
@@ -124,9 +115,6 @@ public class TransferController {
                 .header(
                         "Content-Disposition",
                         "attachment; filename=transactions.pdf")
-                .header(
-                        "Content-Type",
-                        "application/pdf")
                 .body(pdf);
     }
 

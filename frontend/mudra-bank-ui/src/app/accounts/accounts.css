@@ -20,6 +20,39 @@
   gap: 16px;
 }
 
+.header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.csv-btn,
+.pdf-btn,
+.add-account-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.csv-btn {
+    background: #2e7d32;
+}
+
+.csv-btn:hover {
+    background: #1b5e20;
+}
+
+.pdf-btn {
+    background: #c62828;
+}
+
+.pdf-btn:hover {
+    background: #8e0000;
+}
+
 .logo {
   width: 60px;
   height: 60px;

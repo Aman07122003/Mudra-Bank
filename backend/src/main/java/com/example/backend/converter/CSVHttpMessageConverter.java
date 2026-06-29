@@ -9,6 +9,8 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Converts a collection of objects into CSV format.
@@ -18,6 +20,8 @@ import java.util.Comparator;
  */
 @Component
 public class CSVHttpMessageConverter {
+    private static final SimpleDateFormat DATE_FORMAT =
+            new SimpleDateFormat("dd-MM-yyyy");
 
     /**
      * Converts the given collection into CSV format.
@@ -66,9 +70,13 @@ public class CSVHttpMessageConverter {
 
                     Object value = fields[i].get(object);
 
-                    values[i] = value == null
-                            ? ""
-                            : value.toString();
+                    if (value == null) {
+                        values[i] = "";
+                    } else if (value instanceof Date date) {
+                        values[i] = DATE_FORMAT.format(date);
+                    } else {
+                        values[i] = value.toString();
+                    }
                 }
 
                 csvWriter.writeNext(values);

@@ -130,5 +130,53 @@ changePageSize() {
 
   this.loadTransactions(this.account.accountNumber);
 }
+
+downloadCsv(): void {
+
+  this.transferService
+    .exportTransactionsCsv(
+      this.account.accountNumber,
+      this.currentPage,
+      this.pageSize
+    )
+    .subscribe(blob => {
+
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+
+      a.href = url;
+      a.download = 'transactions.csv';
+
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+    });
+
+}
+
+downloadPdf(): void {
+
+  this.transferService
+    .exportTransactionsPdf(
+      this.account.accountNumber,
+      this.currentPage,
+      this.pageSize
+    )
+    .subscribe(blob => {
+
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+
+      a.href = url;
+      a.download = 'transactions.pdf';
+
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+    });
+
+}
   
 }

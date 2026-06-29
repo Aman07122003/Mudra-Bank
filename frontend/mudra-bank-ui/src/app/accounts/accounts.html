@@ -7,11 +7,33 @@
         <p>Account Management</p>
       </div>
     </div>
-    <div>
-        <button class="add-account-btn" (click)="addAccount()">
-            Add Account
-        </button>
-    </div>
+    <div class="header-actions">
+
+      <button
+          class="csv-btn"
+          (click)="downloadCsv()">
+
+          Download CSV
+
+      </button>
+
+      <button
+          class="pdf-btn"
+          (click)="downloadPdf()">
+
+          Download PDF
+
+      </button>
+
+      <button
+          class="add-account-btn"
+          (click)="addAccount()">
+
+          Add Account
+
+      </button>
+
+  </div>
   </div>
 
   <table>

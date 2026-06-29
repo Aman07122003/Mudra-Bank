@@ -81,16 +81,16 @@ public class BankAccountController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/export/pdf")
-    public ResponseEntity<byte[]> exportAccountsPdf(
-            @RequestParam(defaultValue = "0") final int page,
-            @RequestParam(defaultValue = "10") final int size) {
+    @GetMapping(
+            value = "/export/pdf",
+            produces = "application/pdf")
+    public ResponseEntity<byte[]> exportAccountsToPdf() {
 
         GetBankAccountsRequest request =
                 new GetBankAccountsRequest();
 
-        request.setPage(page);
-        request.setSize(size);
+        request.setPage(0);
+        request.setSize(Integer.MAX_VALUE);
 
         GetBankAccountsResponse response =
                 service.getBankAccounts(request);
@@ -103,9 +103,6 @@ public class BankAccountController {
                 .header(
                         "Content-Disposition",
                         "attachment; filename=accounts.pdf")
-                .header(
-                        "Content-Type",
-                        "application/pdf")
                 .body(pdf);
     }
 
@@ -160,24 +157,17 @@ public class BankAccountController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     *
-     * @param page
-     * @param size
-     * @return
-     */
+
     @GetMapping(
             value = "/export/csv",
             produces = "text/csv")
-    public ResponseEntity<String> exportAccountsToCsv(
-            @RequestParam(defaultValue = "0") final int page,
-            @RequestParam(defaultValue = "10") final int size) {
+    public ResponseEntity<String> exportAccountsToCsv() {
 
         GetBankAccountsRequest request =
                 new GetBankAccountsRequest();
 
-        request.setPage(page);
-        request.setSize(size);
+        request.setPage(0);
+        request.setSize(Integer.MAX_VALUE);
 
         GetBankAccountsResponse response =
                 service.getBankAccounts(request);
