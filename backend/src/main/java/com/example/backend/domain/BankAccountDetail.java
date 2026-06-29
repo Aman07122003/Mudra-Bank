@@ -1,46 +1,71 @@
 package com.example.backend.domain;
 
-import java.math.BigDecimal;
-import java.util.List;
+import com.example.backend.annotation.CsvColumn;
 
+import java.math.BigDecimal;
+
+/**
+ * Represents a bank account summary returned by the service layer.
+ *
+ * <p>This class is used to transfer bank account information
+ * between application layers without exposing the underlying
+ * persistence entity.
+ *
+ * <p>It contains the account number, account holder name,
+ * and current account balance.
+ */
 public class BankAccountDetail {
 
-    private Long accountNumber;
-    private String holderName;
-    private BigDecimal balance;
+    @CsvColumn(order = 1, header = "Account Number")
+    private final Long accountNumber;
 
-    public BankAccountDetail() {
+    @CsvColumn(order = 3, header = "Balance")
+    private final BigDecimal balance;
+
+    @CsvColumn(order = 2, header = "Account Holder")
+    private final String holderName;
+
+    /**
+     * Creates a bank account detail instance with all properties.
+     *
+     * @param number unique account number
+     * @param bal current account balance
+     * @param name name of the account holder
+     */
+    public BankAccountDetail(
+            final Long number,
+            final String name,
+            final BigDecimal bal) {
+
+        this.accountNumber = number;
+        this.balance = bal;
+        this.holderName = name;
     }
 
-    public BankAccountDetail(Long accountNumber,
-                             String holderName,
-                             BigDecimal balance) {
-        this.accountNumber = accountNumber;
-        this.holderName = holderName;
-        this.balance = balance;
-    }
-
+    /**
+     * Returns the account number.
+     *
+     * @return unique account number
+     */
     public Long getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Long accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public String getHolderName() {
-        return holderName;
-    }
-
-    public void setHolderName(String holderName) {
-        this.holderName = holderName;
-    }
-
+    /**
+     * Returns the current account balance.
+     *
+     * @return current balance
+     */
     public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
+    /**
+     * Returns the account holder's name.
+     *
+     * @return holder name
+     */
+    public String getHolderName() {
+        return holderName;
     }
 }

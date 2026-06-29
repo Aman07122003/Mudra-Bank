@@ -1,68 +1,101 @@
 package com.example.backend.domain;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import com.example.backend.annotation.CsvColumn;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * Represents the details of a bank account transfer.
+ *
+ * <p>This object is used to return transfer information to clients,
+ * including the transaction number, transfer type, related account,
+ * transferred amount, and transaction date.
+ */
 public class TransferDetail {
 
-    private Long transactionNumber;
-    private Long sourceAccountNumber;
-    private Long targetAccountNumber;
-    private BigDecimal amount;
-    private LocalDateTime transactionDate;
+    @CsvColumn(order = 5, header = "Amount")
+    private final BigDecimal amount;
 
-    public TransferDetail() {
+    @CsvColumn(order = 4, header = "From/To")
+    private final String fromToAccountNumber;
+
+    @CsvColumn(order = 2, header = "Date")
+    private final Date transactionDate;
+
+    @CsvColumn(order = 1, header = "Transaction Number")
+    private final Long transactionNumber;
+
+    @CsvColumn(order = 3, header = "Type")
+    private final TransferType transferType;
+
+    /**
+     * Creates a new transfer detail.
+     *
+     * @param transactionNum unique transaction number
+     * @param type type of transfer (debit or credit)
+     * @param fromToAccountNum account holder associated with the
+     *                            transfer
+     * @param amt transferred amount
+     * @param date date and time when the transfer occurred
+     */
+    public TransferDetail(
+            final Long transactionNum,
+            final TransferType type,
+            final String fromToAccountNum,
+            final BigDecimal amt,
+            final Date date) {
+
+        this.amount = amt;
+        this.fromToAccountNumber = fromToAccountNum;
+        this.transactionDate = date;
+        this.transactionNumber = transactionNum;
+        this.transferType = type;
     }
 
-    public TransferDetail(Long transactionNumber,
-                          Long sourceAccountNumber,
-                          Long targetAccountNumber,
-                          BigDecimal amount,
-                          LocalDateTime transactionDate) {
-        this.transactionNumber = transactionNumber;
-        this.sourceAccountNumber = sourceAccountNumber;
-        this.targetAccountNumber = targetAccountNumber;
-        this.amount = amount;
-        this.transactionDate = transactionDate;
-    }
-
-    public Long getTransactionNumber() {
-        return transactionNumber;
-    }
-
-    public void setTransactionNumber(Long transactionNumber) {
-        this.transactionNumber = transactionNumber;
-    }
-
-    public Long getSourceAccountNumber() {
-        return sourceAccountNumber;
-    }
-
-    public void setSourceAccountNumber(Long sourceAccountNumber) {
-        this.sourceAccountNumber = sourceAccountNumber;
-    }
-
-    public Long getTargetAccountNumber() {
-        return targetAccountNumber;
-    }
-
-    public void setTargetAccountNumber(Long targetAccountNumber) {
-        this.targetAccountNumber = targetAccountNumber;
-    }
-
+    /**
+     * Returns the transferred amount.
+     *
+     * @return transferred amount
+     */
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    /**
+     * Returns the account holder associated with the transfer.
+     *
+     * @return source account holder for credit transfers or
+     *         destination account holder for debit transfers
+     */
+    public String getFromToAccountNumber() {
+        return fromToAccountNumber;
     }
 
-    public LocalDateTime getTransactionDate() {
+    /**
+     * Returns the date and time of the transfer.
+     *
+     * @return transaction date
+     */
+    public Date getTransactionDate() {
         return transactionDate;
     }
 
-    public void setTransactionDate(LocalDateTime transactionDate) {
-        this.transactionDate = transactionDate;
+    /**
+     * Returns the unique transaction number.
+     *
+     * @return transaction number
+     */
+    public Long getTransactionNumber() {
+        return transactionNumber;
+    }
+
+    /**
+     * Returns the transfer type.
+     *
+     * @return transfer type
+     */
+    public TransferType getTransferType() {
+        return transferType;
     }
 }

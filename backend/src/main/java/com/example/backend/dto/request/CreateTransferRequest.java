@@ -2,33 +2,42 @@ package com.example.backend.dto.request;
 
 import java.math.BigDecimal;
 
+/**
+ * Request object used to create a transfer between two bank accounts.
+ *
+ * <p>Contains the source account, destination account,
+ * and the amount to be transferred.
+ */
 public class CreateTransferRequest {
 
-    private Long sourceAccountNumber;
-    private Long destinationAccountNumber;
     private BigDecimal amount;
+    private Long destinationAccountNumber;
+    private Long sourceAccountNumber;
 
-    public Long getSourceAccountNumber() {
-        return sourceAccountNumber;
-    }
-
-    public void setSourceAccountNumber(Long sourceAccountNumber) {
-        this.sourceAccountNumber = sourceAccountNumber;
-    }
-
-    public Long getDestinationAccountNumber() {
-        return destinationAccountNumber;
-    }
-
-    public void setDestinationAccountNumber(Long destinationAccountNumber) {
-        this.destinationAccountNumber = destinationAccountNumber;
-    }
-
+    /**
+     * Returns the amount to be transferred.
+     *
+     * @return transfer amount
+     */
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    /**
+     * Returns the destination account number.
+     *
+     * @return account receiving the transferred funds
+     */
+    public Long getDestinationAccountNumber() {
+        return destinationAccountNumber;
+    }
+
+    /**
+     * Returns the source account number.
+     *
+     * @return account from which funds will be withdrawn
+     */
+    public Long getSourceAccountNumber() {
+        return sourceAccountNumber;
     }
 }
