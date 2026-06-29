@@ -1,15 +1,23 @@
 <div class="details-container">
 
     <div class="page-header">
-        <div>
-            <h1>Account Details</h1>
-            <p>Account #{{ account.accountNumber }}</p>
-        </div>
 
-        <button class="back-btn" routerLink="/">
+    <div>
+        <h1>Account Details</h1>
+        <p>Account #{{ account?.accountNumber }}</p>
+    </div>
+
+    <div class="header-actions">
+
+        <button
+            class="back-btn"
+            routerLink="/">
             ← Back to Accounts
         </button>
+
     </div>
+
+</div>
 
     <!-- Account Summary -->
 
@@ -18,12 +26,12 @@
         <div class="profile-section">
 
             <div class="avatar">
-                {{ account.holderName[0] }}
+                {{ account?.holderName?.charAt(0) }}
             </div>
 
             <div>
-                <h2>{{ account.holderName }}</h2>
-                <p>{{ account.email }}</p>
+                <h2>{{ account?.holderName }}</h2>
+                <p>accountName@gmail.com</p>
             </div>
 
         </div>
@@ -33,7 +41,7 @@
             <span>Available Balance</span>
 
             <h1>
-                ₹ {{ account.balance | number }}
+                ₹ {{ account?.balance | number }}
             </h1>
 
         </div>
@@ -46,17 +54,17 @@
 
         <div class="stat-card">
             <span>Account Number</span>
-            <h3>{{ account.accountNumber }}</h3>
+            <h3>{{ account?.accountNumber }}</h3>
         </div>
 
         <div class="stat-card">
             <span>Mobile</span>
-            <h3>{{ account.mobile }}</h3>
+            <h3>+91-9351873856</h3>
         </div>
 
         <div class="stat-card">
             <span>Branch</span>
-            <h3>{{ account.branch }}</h3>
+            <h3>Gurugram</h3>
         </div>
 
         <div class="stat-card">
@@ -71,13 +79,52 @@
     <div class="card">
 
         <div class="transaction-header">
-            <h2>Transaction History</h2>
+            <div>
+                <h1>Transactions</h1>
+            </div>
+            <div class="pagination">
+
+                <button
+                    (click)="previousPage()"
+                    [disabled]="currentPage === 0">
+
+                    Previous
+
+                </button>
+
+                <span>
+
+                    Page {{ currentPage + 1 }}
+                    of {{ totalPages }}
+
+                </span>
+
+                <button
+                    (click)="nextPage()"
+                    [disabled]="last">
+
+                    Next
+
+                </button>
+
+                <select
+                    [(ngModel)]="pageSize"
+                    (change)="changePageSize()">
+
+                    <option [value]="5">5</option>
+                    <option [value]="10">10</option>
+                    <option [value]="20">20</option>
+
+                </select>
+
+            </div>
         </div>
 
         <table>
 
             <thead>
                 <tr>
+                    <th>Transaction Number</th>
                     <th>Date</th>
                     <th>Type</th>
                     <th>From / To</th>
@@ -91,26 +138,23 @@
 
                 <tr>
 
-                    <td>{{ transaction.date }}</td>
+                    <td class="txn-col">{{ transaction?.transactionNumber }}</td>
+                    <td>{{ transaction.transactionDate | date:'dd-MMM-yyyy' }}</td>
 
                     <td>
 
                         <span
                             class="badge"
-                            [class.credit]="transaction.type === 'Credit'"
-                            [class.debit]="transaction.type === 'Debit'">
+                            [class.credit]="transaction.transferType === 'CREDIT'"
+                            [class.debit]="transaction.transferType === 'DEBIT'">
 
-                            {{ transaction.type }}
+                            {{ transaction.transferType }}
 
                         </span>
 
                     </td>
-
-                    <td>{{ transaction.fromTo }}</td>
-
-                    <td>
-                        ₹ {{ transaction.amount | number }}
-                    </td>
+                    <td>{{ transaction.fromToAccountNumber }}</td>
+                    <td>₹ {{ transaction?.amount | number }}</td>
 
                 </tr>
 
@@ -121,5 +165,4 @@
         </table>
 
     </div>
-
 </div>

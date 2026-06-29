@@ -1,5 +1,4 @@
 <div class="container">
-
   <div class="page-header">
     <div class="brand">
       <img src="images/logo.png" alt="Mudra Bank Logo" class="logo">
@@ -26,50 +25,89 @@
     </thead>
 
     <tbody>
-      @for(account of accounts; track account.accountNumber) {
-      <tr
-            class="account-row"
-            (click)="openAccount(account)">
-        <td>{{ account.accountNumber }}</td>
+  <tr
+    class="account-row"
+    *ngFor="let account of accounts; trackBy: trackByAccountNumber"
+    (click)="openAccount(account)"
+  >
+    <td>{{ account.accountNumber }}</td>
 
-        <td class="account-name">
-          {{ account.holderName }}
-        </td>
+    <td class="account-name">
+      {{ account.holderName }}
+    </td>
 
-        <td>
-          ₹ {{ account.balance }}
-        </td>
+    <td>
+      ₹ {{ account.balance }}
+    </td>
 
-        <td class="action-buttons">
-          <button
-            class="debit-btn"
-            (click)="$event.stopPropagation(); debit(account)">
-            Debit
-          </button>
+    <td class="action-buttons">
+      <button
+        class="debit-btn"
+        (click)="$event.stopPropagation(); debit(account)">
+        Debit
+      </button>
 
-          <button
-            class="credit-btn"
-            (click)="$event.stopPropagation(); credit(account)">
-            Credit
-          </button>
-        </td>
-      </tr>
-      }
-    </tbody>
+      <button
+        class="credit-btn"
+        (click)="$event.stopPropagation(); credit(account)">
+        Credit
+      </button>
+    </td>
+  </tr>
+</tbody>
   </table>
+
+  <div class="pagination">
+
+      <button
+        (click)="previousPage()"
+        [disabled]="currentPage === 0">
+
+        Previous
+
+      </button>
+
+      <span>
+
+        Page {{ currentPage + 1 }}
+        of {{ totalPages }}
+
+      </span>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="last">
+
+        Next
+
+      </button>
+
+      <select
+      [(ngModel)]="pageSize"
+      (change)="loadAccounts()">
+
+        <option [value]="5">5</option>
+        <option [value]="10">10</option>
+        <option [value]="20">20</option>
+
+    </select>
+
+  </div>
 
 </div>
 
 @if(showTransactionModal){
-    <app-transaction
+    <app-transfer
         [account]="selectedAccount"
         [type]="transactionType"
-        (close)="closeTransactionModal()">
-    </app-transaction>
+        (close)="closeTransactionModal()"
+        (refresh)="loadAccounts()">
+    </app-transfer>
 }
 
 @if(showAddAccountModal){
-    <app-add-account
-        (close)="closeAddAccountModal()">
-    </app-add-account>
+  <app-add-account
+      (close)="closeAddAccountModal()"
+      (refresh)="loadAccounts()">
+  </app-add-account>
 }

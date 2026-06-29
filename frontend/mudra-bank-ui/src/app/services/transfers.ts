@@ -1,4 +1,36 @@
-import { Service } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { CreateTransferRequest, CreateTransferResponse, GetAccountTransactionsResponse } from '../models/transfer.model';
 
-@Service()
-export class Transfers {}
+@Injectable({
+  providedIn: 'root'
+})
+export class TransferService {
+
+  private baseUrl = 'http://localhost:8080/transfers';
+
+  constructor(
+    private http: HttpClient
+  ) {}
+
+  createTransfer(
+    request: CreateTransferRequest
+  ) {
+    return this.http.put<CreateTransferResponse>(
+      this.baseUrl,
+      request
+    );
+  }
+
+  getAccountTransactions(
+    accountNumber: number,
+    page: number,
+    size: number
+  ): Observable<GetAccountTransactionsResponse> {
+
+    return this.http.get<GetAccountTransactionsResponse>(
+      `${this.baseUrl}/account/${accountNumber}?page=${page}&size=${size}`
+    );
+  }
+}

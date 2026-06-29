@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
-import { Account } from '../models/account.model';
+import { Component, OnInit } from '@angular/core';
+import { BankAccount } from '../models/account.model';
 import { CommonModule } from '@angular/common';
 import { AddAccount } from '../add-account/add-account';
-import { Transaction } from '../transaction/transaction';
+import { Transfer} from '../transfer/transfer';
 import { Router } from '@angular/router';
-
+import { AccountService } from '../services/account';
+import { ChangeDetectorRef } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-accounts',
@@ -12,165 +15,116 @@ import { Router } from '@angular/router';
   imports: [
     CommonModule,
     AddAccount,
-    Transaction
+    Transfer,
+    FormsModule
   ],
   templateUrl: './accounts.html',
   styleUrl: './accounts.css',
 })
-export class Accounts {
+export class Accounts implements OnInit {
 
-  constructor(private router: Router) {}
-  accounts: Account[] = [
-    {
-      accountNumber: 100001,
-      holderName: 'Aman Pratap Singh',
-      balance: 50000
-    },
-    {
-      accountNumber: 100002,
-      holderName: 'Rahul Sharma',
-      balance: 25000
-    },
-    {
-      accountNumber: 100003,
-      holderName: 'Priya Verma',
-      balance: 75000
-    },
-    {
-      accountNumber: 100001,
-      holderName: 'Aman Pratap Singh',
-      balance: 50000
-    },
-    {
-      accountNumber: 100002,
-      holderName: 'Rahul Sharma',
-      balance: 25000
-    },
-    {
-      accountNumber: 100003,
-      holderName: 'Priya Verma',
-      balance: 75000
-    },
-    {
-      accountNumber: 100001,
-      holderName: 'Aman Pratap Singh',
-      balance: 50000
-    },
-    {
-      accountNumber: 100002,
-      holderName: 'Rahul Sharma',
-      balance: 25000
-    },
-    {
-      accountNumber: 100003,
-      holderName: 'Priya Verma',
-      balance: 75000
-    },
-    {
-      accountNumber: 100001,
-      holderName: 'Aman Pratap Singh',
-      balance: 50000
-    },
-    {
-      accountNumber: 100002,
-      holderName: 'Rahul Sharma',
-      balance: 25000
-    },
-    {
-      accountNumber: 100003,
-      holderName: 'Priya Verma',
-      balance: 75000
-    },
-    {
-      accountNumber: 100001,
-      holderName: 'Aman Pratap Singh',
-      balance: 50000
-    },
-    {
-      accountNumber: 100002,
-      holderName: 'Rahul Sharma',
-      balance: 25000
-    },
-    {
-      accountNumber: 100003,
-      holderName: 'Priya Verma',
-      balance: 75000
-    },
-    {
-      accountNumber: 100001,
-      holderName: 'Aman Pratap Singh',
-      balance: 50000
-    },
-    {
-      accountNumber: 100002,
-      holderName: 'Rahul Sharma',
-      balance: 25000
-    },
-    {
-      accountNumber: 100003,
-      holderName: 'Priya Verma',
-      balance: 75000
-    },
-    {
-      accountNumber: 100001,
-      holderName: 'Aman Pratap Singh',
-      balance: 50000
-    },
-    {
-      accountNumber: 100002,
-      holderName: 'Rahul Sharma',
-      balance: 25000
-    },
-    {
-      accountNumber: 100003,
-      holderName: 'Priya Verma',
-      balance: 75000
-    },
-    {
-      accountNumber: 100001,
-      holderName: 'Aman Pratap Singh',
-      balance: 50000
-    },
-    {
-      accountNumber: 100002,
-      holderName: 'Rahul Sharma',
-      balance: 25000
-    },
-    {
-      accountNumber: 100003,
-      holderName: 'Priya Verma',
-      balance: 75000
-    }
-  ];
+  constructor(
+    private router: Router,
+    private accountService: AccountService,
+    private cdr: ChangeDetectorRef,
+    private snackBar: MatSnackBar
+  ) {}
 
-showTransactionModal = false;
+  accounts: BankAccount[] = [];
+
+  showTransactionModal = false;
   showAddAccountModal = false;
+  currentPage = 0;
+  pageSize = 5;
 
-  selectedAccount!: Account;
+  totalPages = 0;
+  totalElements = 0;
+  last = false;
+
+  selectedAccount!: BankAccount;
   transactionType: 'DEBIT' | 'CREDIT' = 'DEBIT';
 
-   openAccount(account: Account): void {
-    this.router.navigate([
-      '/account',
-      account.accountNumber
-    ]);
+  ngOnInit(): void {
+  this.loadAccounts();
+}
+  loadAccounts(): void {
+  this.accountService.getAllAccounts(this.currentPage, this.pageSize).subscribe({
+    next: (res) => {
+      console.log('Accounts fetched successfully', res);
+      this.accounts = res.bankAccounts;
+      this.totalPages = res.totalPages;
+      this.totalElements = res.totalElements;
+      this.last = res.last;
+
+      console.log(res);
+
+      this.cdr.detectChanges();
+    },
+    error: (err) => {
+
+      console.error(err);
+
+      this.snackBar.open(
+        err.error?.message ?? 'Unable to load accounts.',
+        'Close',
+        {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top'
+        }
+      );
+    }
+  });
+}
+
+  openAccount(account: BankAccount): void {
+    this.router.navigate(['/account', account.accountNumber]);
   }
 
-  debit(account: Account): void {
+  debit(account: BankAccount): void {
     this.selectedAccount = account;
     this.transactionType = 'DEBIT';
     this.showTransactionModal = true;
-  }
+  } 
 
-  credit(account: Account): void {
+  credit(account: BankAccount): void {
     this.selectedAccount = account;
     this.transactionType = 'CREDIT';
     this.showTransactionModal = true;
   }
 
   addAccount(): void {
-  console.log('Add Account Clicked');
-  this.showAddAccountModal = true;
+    this.showAddAccountModal = true;
+  }
+
+  previousPage() {
+
+  if (this.currentPage > 0) {
+
+    this.currentPage--;
+
+    this.loadAccounts();
+  }
+
+}
+
+nextPage() {
+
+  if (!this.last) {
+
+    this.currentPage++;
+
+    this.loadAccounts();
+  }
+
+}
+
+changePageSize() {
+
+  this.currentPage = 0;
+
+  this.loadAccounts();
+
 }
 
   closeTransactionModal() {
@@ -180,4 +134,8 @@ showTransactionModal = false;
   closeAddAccountModal() {
     this.showAddAccountModal = false;
   }
+
+  trackByAccountNumber(index: number, account: BankAccount): number {
+  return account.accountNumber;
+}
 }

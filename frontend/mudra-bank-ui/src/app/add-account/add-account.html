@@ -23,8 +23,9 @@
 
             <button
                 class="submit-btn"
-                (click)="save()">
-                Save Account
+                (click)="save()"
+                [disabled]="isSaving">
+                {{ isSaving ? 'Saving...' : 'Save Account' }}
             </button>
         </div>
 
