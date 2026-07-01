@@ -1,6 +1,6 @@
 package com.example.backend.domain;
 
-import com.example.backend.annotation.CsvColumn;
+import com.example.backend.annotation.ExportColumn;
 
 import java.math.BigDecimal;
 
@@ -16,13 +16,13 @@ import java.math.BigDecimal;
  */
 public class BankAccountDetail {
 
-    @CsvColumn(order = 1, header = "Account Number")
+    @ExportColumn(order = 1, header = "Account Number")
     private final Long accountNumber;
 
-    @CsvColumn(order = 3, header = "Balance")
+    @ExportColumn(order = 3, header = "Balance")
     private final BigDecimal balance;
 
-    @CsvColumn(order = 2, header = "Account Holder")
+    @ExportColumn(order = 2, header = "Account Holder")
     private final String holderName;
 
     /**

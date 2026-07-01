@@ -30,25 +30,21 @@ getAccount(accountNumber: number) {
     return this.http.put<any>(this.baseUrl, payload);
   }
 
-  downloadAccountsCsv(page: number, size: number) {
-
+  downloadAccountsCsv() {
   return this.http.get(
-    `${this.baseUrl}/export/csv?page=${page}&size=${size}`,
+    `${this.baseUrl}/export/csv`,
     {
       responseType: 'blob'
     }
   );
-
 }
 
-downloadAccountsPdf(page: number, size: number) {
-
+downloadAccountsPdf() {
   return this.http.get(
-    `${this.baseUrl}/export/pdf?page=${page}&size=${size}`,
+    `${this.baseUrl}/export/pdf`,
     {
       responseType: 'blob'
     }
   );
-
 }
 }

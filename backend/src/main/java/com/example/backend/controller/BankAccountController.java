@@ -1,7 +1,4 @@
 package com.example.backend.controller;
-
-import com.example.backend.converter.CSVHttpMessageConverter;
-import com.example.backend.converter.PDFHttpMessageConverter;
 import com.example.backend.dto.request.CreateBankAccountRequest;
 import com.example.backend.dto.request.GetBankAccountDetailRequest;
 import com.example.backend.dto.request.GetBankAccountsRequest;
@@ -23,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+
 /**
  * REST controller responsible for managing bank account operations.
  *
@@ -42,8 +41,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BankAccountController {
     private final BankAccountService service;
-    private final CSVHttpMessageConverter csvConverter;
-    private final PDFHttpMessageConverter pdfConverter;
 
     /**
      * Creates a new controller instance.
@@ -52,13 +49,9 @@ public class BankAccountController {
      *                           account-related operations
      */
     public BankAccountController(
-            final BankAccountService accountService,
-            final CSVHttpMessageConverter csvConverter,
-            final PDFHttpMessageConverter pdfConverter) {
+            final BankAccountService accountService) {
 
         this.service = accountService;
-        this.csvConverter = csvConverter;
-        this.pdfConverter = pdfConverter;
     }
 
     /**
@@ -81,10 +74,20 @@ public class BankAccountController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Exports all bank accounts as CSV data.
+     *
+     * <p>This endpoint retrieves all available bank accounts
+     * by requesting the maximum page size and returns the
+     * result as a downloadable CSV file.
+     *
+     * @return HTTP response containing the bank account
+     *         collection formatted as CSV
+     */
     @GetMapping(
-            value = "/export/pdf",
-            produces = "application/pdf")
-    public ResponseEntity<byte[]> exportAccountsToPdf() {
+            value = "/export/csv",
+            produces = "text/csv")
+    public ResponseEntity<Collection<?>> exportAccountsToCsv() {
 
         GetBankAccountsRequest request =
                 new GetBankAccountsRequest();
@@ -95,17 +98,43 @@ public class BankAccountController {
         GetBankAccountsResponse response =
                 service.getBankAccounts(request);
 
-        byte[] pdf =
-                pdfConverter.toPdf(
-                        response.getBankAccounts());
+        return ResponseEntity.ok()
+                .header(
+                        "Content-Disposition",
+                        "attachment; filename=accounts.csv")
+                .body(response.getBankAccounts());
+    }
+
+    /**
+     * Exports all bank accounts as PDF data.
+     *
+     * <p>This endpoint retrieves all available bank accounts
+     * by requesting the maximum page size and returns the
+     * result as a downloadable PDF file.
+     *
+     * @return HTTP response containing the bank account
+     *         collection formatted as PDF
+     */
+    @GetMapping(
+            value = "/export/pdf",
+            produces = "application/pdf")
+    public ResponseEntity<Collection<?>> exportAccountsToPdf() {
+
+        GetBankAccountsRequest request =
+                new GetBankAccountsRequest();
+
+        request.setPage(0);
+        request.setSize(Integer.MAX_VALUE);
+
+        GetBankAccountsResponse response =
+                service.getBankAccounts(request);
 
         return ResponseEntity.ok()
                 .header(
                         "Content-Disposition",
                         "attachment; filename=accounts.pdf")
-                .body(pdf);
+                .body(response.getBankAccounts());
     }
-
 
     /**
      * Retrieves details for a specific bank account.
@@ -155,31 +184,5 @@ public class BankAccountController {
         GetBankAccountsResponse response = service.getBankAccounts(request);
 
         return ResponseEntity.ok(response);
-    }
-
-
-    @GetMapping(
-            value = "/export/csv",
-            produces = "text/csv")
-    public ResponseEntity<String> exportAccountsToCsv() {
-
-        GetBankAccountsRequest request =
-                new GetBankAccountsRequest();
-
-        request.setPage(0);
-        request.setSize(Integer.MAX_VALUE);
-
-        GetBankAccountsResponse response =
-                service.getBankAccounts(request);
-
-        String csv =
-                csvConverter.toCsv(
-                        response.getBankAccounts());
-
-        return ResponseEntity.ok()
-                .header(
-                        "Content-Disposition",
-                        "attachment; filename=accounts.csv")
-                .body(csv);
     }
 }

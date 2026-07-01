@@ -11,7 +11,7 @@ import java.lang.annotation.ElementType;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface CsvColumn {
+public @interface ExportColumn {
 
     /**
      * Position of the column in the CSV file.

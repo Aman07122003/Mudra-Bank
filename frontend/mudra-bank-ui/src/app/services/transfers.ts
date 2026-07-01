@@ -34,29 +34,21 @@ export class TransferService {
     );
   }
 
-  exportTransactionsCsv(
-    accountNumber: number,
-    page: number,
-    size: number
-  ) {
-    return this.http.get(
-      `${this.baseUrl}/account/${accountNumber}/export/csv?page=${page}&size=${size}`,
-      {
-        responseType: 'blob'
-      }
-    );
-  }
+  downloadTransactionsCsv(accountNumber: number) {
+  return this.http.get(
+    `${this.baseUrl}/account/${accountNumber}/export/csv`,
+    {
+      responseType: 'blob'
+    }
+  );
+}
 
-  exportTransactionsPdf(
-    accountNumber: number,
-    page: number,
-    size: number
-  ) {
-    return this.http.get(
-      `${this.baseUrl}/account/${accountNumber}/export/pdf?page=${page}&size=${size}`,
-      {
-        responseType: 'blob'
-      }
-    );
-  }
+  downloadTransactionsPdf(accountNumber: number) {
+  return this.http.get(
+    `${this.baseUrl}/account/${accountNumber}/export/pdf`,
+    {
+      responseType: 'blob'
+    }
+  );
+}
 }

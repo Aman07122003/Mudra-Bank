@@ -142,44 +142,38 @@ changePageSize() {
 downloadCsv(): void {
 
   this.accountService
-      .downloadAccountsCsv(
-          this.currentPage,
-          this.pageSize)
-      .subscribe(blob => {
+      .downloadAccountsCsv()
+      .subscribe((blob: Blob) => {
 
         const url = window.URL.createObjectURL(blob);
 
-        const link = document.createElement('a');
+        const a = document.createElement('a');
 
-        link.href = url;
-        link.download = 'accounts.csv';
+        a.href = url;
+        a.download = 'accounts.csv';
 
-        link.click();
+        a.click();
 
         window.URL.revokeObjectURL(url);
       });
-
 }
 
 downloadPdf(): void {
 
   this.accountService
-      .downloadAccountsPdf(
-          this.currentPage,
-          this.pageSize)
-      .subscribe(blob => {
+      .downloadAccountsPdf()
+      .subscribe((blob: Blob) => {
 
         const url = window.URL.createObjectURL(blob);
 
-        const link = document.createElement('a');
+        const a = document.createElement('a');
 
-        link.href = url;
-        link.download = 'accounts.pdf';
+        a.href = url;
+        a.download = 'accounts.pdf';
 
-        link.click();
+        a.click();
 
         window.URL.revokeObjectURL(url);
       });
-
 }
 }

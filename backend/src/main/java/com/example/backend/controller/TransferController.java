@@ -1,7 +1,5 @@
 package com.example.backend.controller;
 
-import com.example.backend.converter.CSVHttpMessageConverter;
-import com.example.backend.converter.PDFHttpMessageConverter;
 import com.example.backend.dto.request.CreateTransferRequest;
 import com.example.backend.dto.request.GetAccountTransfersRequest;
 import com.example.backend.dto.response.CreateTransferResponse;
@@ -20,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+
 /**
  * REST controller responsible for handling transfer operations.
  *
@@ -37,8 +37,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TransferController {
     private final TransferService service;
-    private final CSVHttpMessageConverter csvConverter;
-    private final PDFHttpMessageConverter pdfConverter;
 
     /**
      * Creates a new transfer controller.
@@ -46,30 +44,28 @@ public class TransferController {
      * @param transferService service used to process transfer requests
      */
     public TransferController(
-            final TransferService transferService,
-            final CSVHttpMessageConverter csvHttpMessageConverter,
-            final PDFHttpMessageConverter pdfConverter) {
+            final TransferService transferService) {
 
         this.service = transferService;
-        this.csvConverter = csvHttpMessageConverter;
-        this.pdfConverter = pdfConverter;
     }
 
     /**
-     * Exports the transfer history of a specific bank account as a CSV file.
+     * Exports the complete transfer history for a specific
+     * bank account as CSV data.
      *
-     * <p>The transfer history is retrieved using the supplied account number
-     * and pagination parameters, converted into CSV format, and returned
-     * as a downloadable file.
+     * <p>This endpoint retrieves all transfer records associated
+     * with the specified account by requesting the maximum page
+     * size and returns the result as a downloadable CSV file.
      *
-     * @param accountNumber unique account number whose transfer history
-     *                      is to be exported
-     * @return CSV file containing the requested transfer history
+     * @param accountNumber unique account number whose transfer
+     *                      history is to be exported
+     * @return HTTP response containing the transfer collection
+     *         formatted as CSV
      */
     @GetMapping(
             value = "/account/{accountNumber}/export/csv",
             produces = "text/csv")
-    public ResponseEntity<String> exportTransfersToCsv(
+    public ResponseEntity<Collection<?>> exportTransfersToCsv(
             @PathVariable final Long accountNumber) {
 
         GetAccountTransfersRequest request =
@@ -80,22 +76,31 @@ public class TransferController {
 
         GetAccountTransfersResponse response =
                 service.getAccountTransfers(request);
-
-        String csv =
-                csvConverter.toCsv(
-                        response.getTransactions());
 
         return ResponseEntity.ok()
                 .header(
                         "Content-Disposition",
                         "attachment; filename=transactions.csv")
-                .body(csv);
+                .body(response.getTransactions());
     }
 
+    /**
+     * Exports the complete transfer history for a specific
+     * bank account as PDF data.
+     *
+     * <p>This endpoint retrieves all transfer records associated
+     * with the specified account by requesting the maximum page
+     * size and returns the result as a downloadable PDF file.
+     *
+     * @param accountNumber unique account number whose transfer
+     *                      history is to be exported
+     * @return HTTP response containing the transfer collection
+     *         formatted as PDF
+     */
     @GetMapping(
             value = "/account/{accountNumber}/export/pdf",
             produces = "application/pdf")
-    public ResponseEntity<byte[]> exportTransfersToPdf(
+    public ResponseEntity<Collection<?>> exportTransfersToPdf(
             @PathVariable final Long accountNumber) {
 
         GetAccountTransfersRequest request =
@@ -107,15 +112,11 @@ public class TransferController {
         GetAccountTransfersResponse response =
                 service.getAccountTransfers(request);
 
-        byte[] pdf =
-                pdfConverter.toPdf(
-                        response.getTransactions());
-
         return ResponseEntity.ok()
                 .header(
                         "Content-Disposition",
                         "attachment; filename=transactions.pdf")
-                .body(pdf);
+                .body(response.getTransactions());
     }
 
     /**

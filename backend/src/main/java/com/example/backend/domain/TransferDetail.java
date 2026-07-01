@@ -1,6 +1,6 @@
 package com.example.backend.domain;
 
-import com.example.backend.annotation.CsvColumn;
+import com.example.backend.annotation.ExportColumn;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,19 +14,19 @@ import java.util.Date;
  */
 public class TransferDetail {
 
-    @CsvColumn(order = 5, header = "Amount")
+    @ExportColumn(order = 5, header = "Amount")
     private final BigDecimal amount;
 
-    @CsvColumn(order = 4, header = "From/To")
+    @ExportColumn(order = 4, header = "From/To")
     private final String fromToAccountNumber;
 
-    @CsvColumn(order = 2, header = "Date")
+    @ExportColumn(order = 2, header = "Date")
     private final Date transactionDate;
 
-    @CsvColumn(order = 1, header = "Transaction Number")
+    @ExportColumn(order = 1, header = "Transaction Number")
     private final Long transactionNumber;
 
-    @CsvColumn(order = 3, header = "Type")
+    @ExportColumn(order = 3, header = "Type")
     private final TransferType transferType;
 
     /**

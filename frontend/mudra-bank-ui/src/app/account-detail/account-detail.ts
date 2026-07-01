@@ -134,49 +134,39 @@ changePageSize() {
 downloadCsv(): void {
 
   this.transferService
-    .exportTransactionsCsv(
-      this.account.accountNumber,
-      this.currentPage,
-      this.pageSize
-    )
-    .subscribe(blob => {
+      .downloadTransactionsCsv(this.account.accountNumber)
+      .subscribe(blob => {
 
-      const url = window.URL.createObjectURL(blob);
+        const url = window.URL.createObjectURL(blob);
 
-      const a = document.createElement('a');
+        const a = document.createElement('a');
 
-      a.href = url;
-      a.download = 'transactions.csv';
+        a.href = url;
+        a.download = 'transactions.csv';
 
-      a.click();
+        a.click();
 
-      window.URL.revokeObjectURL(url);
-    });
-
+        window.URL.revokeObjectURL(url);
+      });
 }
 
 downloadPdf(): void {
 
   this.transferService
-    .exportTransactionsPdf(
-      this.account.accountNumber,
-      this.currentPage,
-      this.pageSize
-    )
-    .subscribe(blob => {
+      .downloadTransactionsPdf(this.account.accountNumber)
+      .subscribe(blob => {
 
-      const url = window.URL.createObjectURL(blob);
+        const url = window.URL.createObjectURL(blob);
 
-      const a = document.createElement('a');
+        const a = document.createElement('a');
 
-      a.href = url;
-      a.download = 'transactions.pdf';
+        a.href = url;
+        a.download = 'transactions.pdf';
 
-      a.click();
+        a.click();
 
-      window.URL.revokeObjectURL(url);
-    });
-
+        window.URL.revokeObjectURL(url);
+      });
 }
   
 }
